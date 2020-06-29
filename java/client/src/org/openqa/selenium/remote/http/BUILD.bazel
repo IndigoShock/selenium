@@ -1,4 +1,5 @@
-load("//java:maven.bzl", "java_export")
+load("@rules_jvm_external//:defs.bzl", "artifact")
+load("//java:defs.bzl", "java_export")
 load("//java:version.bzl", "SE_VERSION")
 
 java_export(
@@ -6,12 +7,15 @@ java_export(
     srcs = glob(["*.java"]),
     maven_coordinates = "org.seleniumhq.selenium:selenium-http:%s" % SE_VERSION,
     pom_template = "//java/client/src/org/openqa/selenium:template-pom",
+    uses = [
+        "org.openqa.selenium.remote.http.HttpClient$Factory",
+    ],
     visibility = [
         "//visibility:public",
     ],
     deps = [
         "//java/client/src/org/openqa/selenium:core",
         "//java/client/src/org/openqa/selenium/json",
-        "//third_party/java/guava",
+        artifact("com.google.guava:guava"),
     ],
 )
